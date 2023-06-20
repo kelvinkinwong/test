@@ -1,0 +1,41 @@
+Gap Analysis Deliverables:
+-----------------------
+
+Scenario 1: New Products - product spec/spreadsheet to be provided by FTLife
+
+Objective:
+- Validate if InsureMO Product Factory can faciltate the setup of new products:
+	- [Fully enabled] New Business Processes - Quotation/Proposal APIs for target Frontend POS Flow
+	- [Gap Analysis required] Policy Administration - Servicing, Claim incl. inforce illustration
+
+Measurement:
+	- Time to Market for New Business : from XX days to YY days, where XX > YY, YY to be provided by eBAO, XX to be provided by FTLife
+		- Setup once for all sales channel 
+		- Shorter time to create similar product by cloning from existing one
+	- Operation Efficiency : ease of maintenance and shorten issue resolution time related to product configuration
+		- Single source of product definition and re-usable components like formulas
+
+Approach:
+- Evaluate the effort to completely setup the new products in InsureMO Product Factory, analysis the following gaps (if any)
+	- [New Business] Check if New Business's proposal/quotation APIs functionable once the products setup completely, figure out gaps if any
+	- [Policy Administration] Outline the methodology to incorporate the product setup data from InsureMO Product Factory to Core System incl. but not limited to following:
+		1. For Product Factory, check the Gaps if any to incorporate "new" features from FTLife evolved these years - e.g. premium holidays, premium discount for New Products 
+		2. The integration approach from Product Factory to Core System's tables (e.g. via CSV file + Manual Import  ...etc.)
+		3. Analysis the list of tables in Core Systems involved for new products setup
+		4. Analysis the additional items involved to complete the product setup for PA in Core System after above steps done (e.g. build formulas with PLSQL coding for inforce illustration)
+
+
+Scenario 2: Existing on-shelf products in eBAO
+
+Objective:
+- Quickly enable Existing Products' Proposal/Illustration functionality for New Business
+- Provides baseline view to FTLife to understand the overall migration efforts from Existing Platform to Product Factory (NB portion)
+
+
+Approach:
+- Evaluate the effort to migrate existing products to InsureMO Product Factory 
+
+
+
+Outcome:
+
