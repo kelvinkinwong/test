@@ -1,0 +1,33 @@
+title Minor Claim End to End Flow (from P08 and Agency's digital submission)
+participant Agent
+participant Customer
+
+participant OPS
+
+participant P08
+
+participant P10
+
+participant MCC Page
+
+
+participant OCR
+
+participant One Digital Servicing Platform
+
+alt Entry from P08
+Agent->P08:Login P08
+Agent->MCC Page:Open MCC Page with SSO
+alt Image Data ready
+Agent->MCC Page:Submit Claim Form Image Data on behalf of customer
+MCC Page->OCR:Capture Claim Input
+OPS->OCR:Review and Correct OCR Data
+OCR->One Digital Servicing Platform:Send Claim Data(for preview page)\nand Trigger Customer Acknowledgement Flow
+One Digital Servicing Platform->eBAO:Record Claim Request in Evaluation\nBasket via Submission API\nafter customer's confirmation
+end
+alt By Direct Form Input
+Agent->MCC Page:Fill in Claim Detail on behalf of customer
+MCC Page->One Digital Servicing Platform:Send Claim Data (for preview page)\nand Trigger Customer Acknowledgement Flow
+One Digital Servicing Platform->eBAO:Record Claim Request in Evaluation\nBasket via Submission API\nafter customer's confirmation
+end
+end
