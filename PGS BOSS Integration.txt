@@ -1,0 +1,49 @@
+title PGS and BOSS Integration Sequence Flow
+
+participant IFA/Agency User
+participant BOSS Consultant Portal
+participant PGS Portal
+
+participant PGS Service
+participant PGS DB
+
+IFA/Agency User->BOSS Consultant Portal:Login with Credentials
+IFA/Agency User->BOSS Consultant Portal:Select "Sales Illustration"
+alt Perform Search
+IFA/Agency User->BOSS Consultant Portal:Enter Search Criteria (optional) and press Search
+
+BOSS Consultant Portal->PGS Service:API # 1: call PGS API to fetch PGS's illustration entries\nmeeting the search criteria
+BOSS Consultant Portal->BOSS Consultant Portal:Combin PGS entries with BOSS entries\nto preserve existing search result behavior
+
+end
+
+alt Perform Delete Sales Illustration Entry at Search Page
+IFA/Agency User->BOSS Consultant Portal:Click "Delete" icon of an entry
+BOSS Consultant Portal->BOSS Consultant Portal:Determine if the entry is from PGS
+alt If entry from PGS
+BOSS Consultant Portal->PGS Service:API# 2: call PGS API to update PGS to logically remove\nthe illustration entry
+PGS Service->PGS DB: Mark Delete the illustration entry 
+end
+alt If entry from BOSS
+BOSS Consultant Portal->BOSS Consultant Portal:Perform Delete entry (as-is function)
+end
+BOSS Consultant Portal->BOSS Consultant Portal:Refresh the Search Page
+end
+
+alt Perform Edit Sales Illustration
+IFA/Agency User->BOSS Consultant Portal:Click "Edit" icon of en entry
+BOSS Consultant Portal->BOSS Consultant Portal:Determine if the entry is from PGS
+BOSS Consultant Portal->PGS Portal:Display PGS Sales Illustration Detail as iFrame
+end
+
+alt Perform Sales Illustration in PGS
+IFA/Agency User->PGS Portal:Enter Insured Information
+IFA/Agency User->PGS Portal:Select Product Type and Plan Code
+PGS Portal->Product Router:Plan Code
+Product Router->Product Router:Determine Plan Code from PGS or BOSS
+alt if Plan Code from BOSS
+Product Router->BOSS Consultant Portal:Redirect to BOSS Sales Illustration Detail with new illustration #
+end
+
+end
+
