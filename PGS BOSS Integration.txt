@@ -33,7 +33,7 @@ end
 alt Perform Edit Sales Illustration
 IFA/Agency User->BOSS Consultant Portal:Click "Edit" icon of en entry
 BOSS Consultant Portal->BOSS Consultant Portal:Determine if the entry is from PGS
-BOSS Consultant Portal->PGS Portal:Display PGS Sales Illustration Detail as iFrame
+BOSS Consultant Portal->PGS Portal:Web Integration #1: \nCall PGS Sales Illustration Detail Page in iFrame\nwith Sales Illustration # as business key
 end
 
 alt Perform Sales Illustration in PGS
