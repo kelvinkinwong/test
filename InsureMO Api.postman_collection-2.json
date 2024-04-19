@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "c73a7c55-48af-46df-b43e-54bc0c1d89dc",
+		"name": "InsureMO Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26835543"
+	},
+	"item": [
+		{
+			"name": "Query products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "MOATdVsgQhRmAWvx7PrHbwx1_UWmupsR",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://portal-gw.insuremo.com/ebaoli/1.0/pd/products",
+					"protocol": "https",
+					"host": [
+						"portal-gw",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"ebaoli",
+						"1.0",
+						"pd",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enquiry product ratetable list",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "MOATdVsgQhRmAWvx7PrHbwx1_UWmupsR",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://portal-gw.insuremo.com/ebaoli/1.0/pd/products/ratetables/T20R",
+					"protocol": "https",
+					"host": [
+						"portal-gw",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"ebaoli",
+						"1.0",
+						"pd",
+						"products",
+						"ratetables",
+						"T20R"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product all details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "MOATdVsgQhRmAWvx7PrHbwx1_UWmupsR",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://portal-gw.insuremo.com/ebaoli/1.0/pd/products/allInfo/T20R",
+					"protocol": "https",
+					"host": [
+						"portal-gw",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"ebaoli",
+						"1.0",
+						"pd",
+						"products",
+						"allInfo",
+						"T20R"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
