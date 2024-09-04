@@ -1,0 +1,765 @@
+{
+	"info": {
+		"_postman_id": "8becc160-5f0e-4ead-9041-99b58fee0cfa",
+		"name": "UAT API Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26835543"
+	},
+	"item": [
+		{
+			"name": "Query products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "_-In3M2oT6OhDyJmfRtlMQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sandbox-hk-gw.insuremo.com/ebaoli/1.0/pd/products",
+					"protocol": "https",
+					"host": [
+						"sandbox-hk-gw",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"ebaoli",
+						"1.0",
+						"pd",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query products Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "PzBT8C_BRzOBNf4qxPNSfg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n    \"mainPlanIndi\": \"Y\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/queryProductList",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"queryProductList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product all details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "FkX7MB7tQ5iuE17n-yUtVQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sandbox-hk-gw.insuremo.com/ebaoli/1.0/pd/products/allInfo/CPON1",
+					"protocol": "https",
+					"host": [
+						"sandbox-hk-gw",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"ebaoli",
+						"1.0",
+						"pd",
+						"products",
+						"allInfo",
+						"CPON1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product all details Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "z6CrAENURremZhdV6ZjGiQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/queryProductDetail/NHNMA2UR",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"queryProductDetail",
+						"NHNMA2UR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query product list",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "JEb5zcenSWGaospRDMidHw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"qualificationList\": [\n        55\n    ],\n    \"mainPlanIndi\": \"N\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/queryProductList",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"queryProductList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Premium calculation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Iy-nYG0HQ2yEn1Lumaeryw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"currencyId\": 4,\n    \"chargeMode\": 4,\n    \"prepaymentIndi\": \"Y\",\n    \"inceptionDate\": \"2024-07-21\",\n    \"calcDueDate\": \"2024-07-21\",\n    \"holderInfo\": {\n        \"holderGender\": \"M\",\n        \"holderSmoking\": \"N\",\n        \"holderAge\": \"30\"\n    },\n    \"insuredInfo\": {\n        \"insuredGender\": \"F\",\n        \"insuredSmoking\": \"N\",\n        \"insuredAge\": \"10\"\n    },\n    \"coverageList\": [\n        {\n            \"productCode\": \"CPON1\",\n            \"chargePeriod\": \"2\",\n            \"chargeYear\": 2,\n            \"coveragePeriod\": \"3\",\n            \"coverageYear\": 128,\n            \"initialPremium\": 14999.99,\n            \"loadingList\": [\n                {\n                    \"loadingType\": \"1\",\n                    \"loadingValue\": \"S\"\n                },\n                {\n                    \"loadingType\": \"2\",\n                    \"loadingValue\": \"0\"\n                }\n            ]\n        },\n        {\n            \"productCode\": \"MEDUR\",\n            \"chargePeriod\": \"3\",\n            \"chargeYear\": 128,\n            \"coveragePeriod\": \"3\",\n            \"coverageYear\": 128,\n            \"initialAmount\": 0,\n            \"benefitLevel\": \"6\",\n            \"attachToProduct\": \"CPON1\",\n            \"loadingList\": [\n                {\n                    \"loadingType\": \"1\",\n                    \"loadingValue\": \"175\"\n                },\n                {\n                    \"loadingType\": \"2\",\n                    \"loadingValue\": \"0\"\n                }\n            ]\n        },\n        {\n            \"productCode\": \"MB10UR\",\n            \"chargePeriod\": \"3\",\n            \"chargeYear\": 70,\n            \"coveragePeriod\": \"3\",\n            \"coverageYear\": 70,\n            \"initialAmount\": 150,\n            \"unit\": \"150\",\n            \"attachToProduct\": \"CPON1\",\n            \"loadingList\": [\n                {\n                    \"loadingType\": \"1\",\n                    \"loadingValue\": \"175\"\n                }\n                // ,{\n                //     \"loadingType\": \"2\",\n                //     \"loadingValue\": \"0\"\n                // }\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/calc/premium",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"calc",
+						"premium"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Commission calculation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Swf4mlNlR5Wy7FPHZGCW8A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"calculateDate\": \"2024-07-22\",\n    \"currency\": 4,\n    \"tenantBaseCurrency\": 4,\n    \"commissionType\": 1,\n    \"feeType\": 41,\n    \"agentCategory\": \"1\",\n    \"coverages\": [\n        {\n            \"coverageSerialId\": 0,\n            \"productCode\": \"CPON1\",\n            \"chargePeriod\": \"2\",\n            \"inceptionDate\": \"2024-07-22\",\n            \"paymentFreq\": 1,\n            \"chargeYear\": 2,\n            \"coveragePeriod\": \"3\",\n            \"coverageYear\": 128,\n            \"premium\": 12480,\n            \"sumAssured\": 24960,\n            \"insureds\": [\n                {\n                    \"age\": 80,\n                    \"gender\": \"M\",\n                    \"smoking\": \"N\"\n                }\n            ]\n        },\n        {\n            \"coverageSerialId\": 1,\n            \"productCode\": \"VFPUR\",\n            \"chargePeriod\": \"3\",\n            \"inceptionDate\": \"2024-07-22\",\n            \"paymentFreq\": 1,\n            \"chargeYear\": 128,\n            \"coveragePeriod\": \"3\",\n            \"coverageYear\": 128,\n            \"premium\": 8047.2,\n            \"sumAssured\": 0,\n            \"insureds\": [\n                {\n                    \"age\": 80,\n                    \"gender\": \"M\",\n                    \"smoking\": \"N\"\n                }\n            ]\n        }\n        // ,{\n        //     \"coverageSerialId\": 2,\n        //     \"productCode\": \"CFPUR\",\n        //     \"chargePeriod\": \"3\",\n        //     \"inceptionDate\": \"2024-07-22\",\n        //     \"paymentFreq\": 1,\n        //     \"chargeYear\": 100,\n        //     \"coveragePeriod\": \"3\",\n        //     \"coverageYear\": 100,\n        //     \"premium\": 3060,\n        //     \"sumAssured\": 0,\n        //     \"insureds\": [\n        //         {\n        //             \"age\": 80,\n        //             \"gender\": \"M\",\n        //             \"smoking\": \"N\"\n        //         }\n        //     ]\n        // }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/calc/commission",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"calc",
+						"commission"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get settlement info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "GJJ8C7-uQXKAQXQ2c3vFBw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"productCode\": \"CPON1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/querySettlementInfo",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"querySettlementInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query SA limt",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "S4KmOkIfTLOF0crOEZImZw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t//\"productCode\": \"MB10UR\"\n        // \"productCode\": \"HB2CILUR\"\n        \"productCode\": \"LSPAURA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/querySaLimit",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"querySaLimit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Age limit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "S4KmOkIfTLOF0crOEZImZw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t//\"productCode\": \"MB10UR\"\n        \"productCode\": \"CFPUR\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/product/v1/queryAgeLimit",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"product",
+						"v1",
+						"queryAgeLimit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Illustration Generation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "XYQxmd4mQRmvIXjDBjdMUw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"illustrationNo\": \"Pro20240510001\",\n    \"language\": \"en_US\", //en_US/zh_CN/zh_HK\n    \"showPolicyYears\": 30, //0=\"ALL\"(input 0 instead of ALL)/5/10/15/20/25/30/35/40/45/50/55/60/65/70/75/80/85/90/95/100\n    \"showDataDetail\" : \"Y\", //\"Y\" return as JSON format \"N\" return as PDF format\n    \"exportFileType\":\"pdf\", \n    \"needPrint\" : \"N\", // \"Y\" print PDF \"N\" return as JSON\n    \"agentInfo\": {\n        \"agentCode\": \"000001\",\n        \"agentName\": \"AGENT NAME\",\n        \"email\": \"000001@163.com\",\n        \"agentTel\": \"13311113333\",\n        \"agentLevel\" : \"IA1\"\n    },\n    \"coverPageInfo\": {\n        \"coverPageType\": \"Integrated\", //Children/Family/Integrated/Retirement/Youth(Male)\n        \"welcomeMessage\": \"A\"\n   },\n    \"proposalInfo\": {\n        \"currencyId\": 3, //4-USD 3-hk\n        \"chargeMode\": 1, //1-Annual/2-Semi-Annual/4-Monthly\n        \"prepaymentIndi\": \"Y\", //\"Y\",\"N\"\n        \"prepaymentYear\": 1,\n        \"effectiveDate\": \"2023-10-22\",\n        \"holderInfo\": {\n            \"holderName\" : \"Holder Name\",\n            \"holderBirthday\" : \"1980-01-01\",\n            \"holderGender\" : \"F\", //F/M\n            \"holderTitle\" : \"Mr\", //Mr/Mrs/Ms/Miss\n            \"holderSmoking\" : \"N\", //N/Y\n            \"holderAge\" : \"44\"\n        },\n        \"insuredInfo\": {\n            \"insuredNameEn\": \"Jack Tung\",\n            \"insuredNameCn\": \"章\",\n            \"insuredBirthday\": \"\", //Optional, can be \"\" if no birthday. If input both birthday and age, system will calculate based on birthday.\n            \"insuredAge\": \"28\",\n            \"insuredGender\": \"F\", //F/MMY\n            \"insuredSmoking\": \"N\", //\"Y\",\"N\"N\n            \"insuredTitle\": \"Ms\", //Mr/Mrs/Ms/Miss\n            \"relationWithPH \": 1 //\"1\" PH=LA others PH<>LA\n        },\n        \"coverageList\": [\n            {\n                \"productCode\": \"NRRBRCIH\",\n                \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n                \"chargeYear\": 5,\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"coverageYear\": 128,\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"initialAmount\": 200000,\n                \"initialPremium\": 35000\n            },\n            {\n                \"coverageYear\": 128,\n                \"productCode\": \"NHNMW2HR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n               \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 128,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 128,\n                \"productCode\": \"OAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 128,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 75,\n                \"productCode\": \"DAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 75,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 50,\n                \"productCode\": \"MAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 50,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            }\n        ],\n        \"premiumOffsetInfo\": {\n            \"premiumOffsetOption\": 2, // 1: start from; 2: end to\n            \"premiumOffsetPeriodType\": 1, //1: year; 2: age\n            \"premiumOffsetPeriod\": 30\n        },\n        \"settlementInfo\": {\n            \"surrenderSettlementInfo\": {\n                \"settlementOption\": \"I\" //I: regular payment; II: increasing payment\n                ,\n                \"surrenderYear\": 60 //policy year upon surrender\n                ,\n                \"paymentMode\": \"S\" //A: Annually; S : Semi-annually; M: Monthly\n                ,\n                \"regularPaymentYear\": 30 //years of regular payment, used by regular payment only\n                ,\n                \"firstSettlementAmount\": 20000 //First Installment of Surrender Settlement Amount, used by increasing payment\n           },\n            \"deathBenefitSettlementInfo\": {\n                \"settlementOption\": \"I\" //I: regular installment; II: partial withdrawal; P: increaseing payment\n                ,\n                \"deathAge\": 80 //Death Age\n                ,\n                \"paymentMode\": \"S\" //A: Annually; S : Semi-annually; M: Monthly\n                ,\n                \"regularPaymentYear\": 20 //years of regular payment: used by regular payment and partial withdrawal\n                ,\n                \"partialWithdrawRate\": 0.50 //% of partial death benefit, used by partial withdrawal\n                ,\n                \"firstSettlementAmount\": 5000 //First installment of death benefit settlement amount, used by increasing payment\n            }\n        },\n        \"withdrawalOptionInfo\": {\n            \"withdrawalOption\": 2, //1：Partial withdrawal；2：Partial Withdrawal - Demonstrate in Annuity Option\n            \"withdrawalType\": 1, //当withdrawalOption 为2才会用；1： Fix Amount Annuity Option(Annual Amount) 2: 3% of Annual Increment of Annuity \n            \"withdrawalPeriodList\": [\n                {\n                    \"withdrawalPeriodType\": 1, //1：Policy Year; 2:Age\n                    \"withdrawalPeriodFrom\": 10,\n                    \"withdrawalPeriodTo\": 15,\n                    \"withdrawalAmount\": 8000.99\n                }\n            ]\n        },\n        \"wealthSwitchOptionList\": [\n            {\n                \"wealthSwitchOption\": 1, //1：balanced；2：Conservative\n                \"wealthSwitchPeriodType\": 1, //1： Policy anniversary；2：Age\n                \"wealthSwitchPeriod\": 25\n            }\n        ]\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/salesIllustration/v1/generateSalesIllustration",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"salesIllustration",
+						"v1",
+						"generateSalesIllustration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Illustration Generation Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "VEdgpHykS5iVVcuCuXMmeg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"illustrationNo\": \"Pro20240510001\",\n    \"language\": \"en_US\", //en_US/zh_CN/zh_HK\n    \"showPolicyYears\": 30, //0=\"ALL\"(input 0 instead of ALL)/5/10/15/20/25/30/35/40/45/50/55/60/65/70/75/80/85/90/95/100\n    \"showDataDetail\" : \"N\", //\"Y\" return as JSON format \"N\" return as PDF format\n    \"exportFileType\":\"pdf\", \n    \"needPrint\" : \"Y\", // \"Y\" print PDF \"N\" return as JSON\n    \"agentInfo\": {\n        \"agentCode\": \"000001\",\n        \"agentName\": \"AGENT NAME\",\n        \"email\": \"000001@163.com\",\n        \"agentTel\": \"13311113333\",\n        \"agentLevel\" : \"IA1\"\n    },\n    \"coverPageInfo\": {\n        \"coverPageType\": \"Integrated\", //Children/Family/Integrated/Retirement/Youth(Male)\n        \"welcomeMessage\": \"A\"\n   },\n    \"proposalInfo\": {\n        \"currencyId\": 3, //4-USD 3-hk\n        \"chargeMode\": 1, //1-Annual/2-Semi-Annual/4-Monthly\n        \"prepaymentIndi\": \"Y\", //\"Y\",\"N\"\n        \"prepaymentYear\": 1,\n        \"effectiveDate\": \"2023-10-22\",\n        \"holderInfo\": {\n            \"holderName\" : \"Holder Name\",\n            \"holderBirthday\" : \"1980-01-01\",\n            \"holderGender\" : \"F\", //F/M\n            \"holderTitle\" : \"Mr\", //Mr/Mrs/Ms/Miss\n            \"holderSmoking\" : \"N\", //N/Y\n            \"holderAge\" : \"44\"\n        },\n        \"insuredInfo\": {\n            \"insuredNameEn\": \"Jack Tung\",\n            \"insuredNameCn\": \"章\",\n            \"insuredBirthday\": \"\", //Optional, can be \"\" if no birthday. If input both birthday and age, system will calculate based on birthday.\n            \"insuredAge\": \"28\",\n            \"insuredGender\": \"F\", //F/MMY\n            \"insuredSmoking\": \"N\", //\"Y\",\"N\"N\n            \"insuredTitle\": \"Ms\", //Mr/Mrs/Ms/Miss\n            \"relationWithPH \": 1 //\"1\" PH=LA others PH<>LA\n        },\n        \"coverageList\": [\n            {\n                \"productCode\": \"NRRBRCIH\",\n                \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n                \"chargeYear\": 5,\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"coverageYear\": 128,\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"initialAmount\": 200000,\n                \"initialPremium\": 35000\n            },\n            {\n                \"coverageYear\": 128,\n                \"productCode\": \"NHNMW2HR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n               \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 128,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 128,\n                \"productCode\": \"OAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 128,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 75,\n                \"productCode\": \"DAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 75,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 50,\n                \"productCode\": \"MAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 50,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            }\n        ],\n        \"premiumOffsetInfo\": {\n            \"premiumOffsetOption\": 2, // 1: start from; 2: end to\n            \"premiumOffsetPeriodType\": 1, //1: year; 2: age\n            \"premiumOffsetPeriod\": 30\n        },\n        \"settlementInfo\": {\n            \"surrenderSettlementInfo\": {\n                \"settlementOption\": \"I\" //I: regular payment; II: increasing payment\n                ,\n                \"surrenderYear\": 60 //policy year upon surrender\n                ,\n                \"paymentMode\": \"S\" //A: Annually; S : Semi-annually; M: Monthly\n                ,\n                \"regularPaymentYear\": 30 //years of regular payment, used by regular payment only\n                ,\n                \"firstSettlementAmount\": 20000 //First Installment of Surrender Settlement Amount, used by increasing payment\n           },\n            \"deathBenefitSettlementInfo\": {\n                \"settlementOption\": \"I\" //I: regular installment; II: partial withdrawal; P: increaseing payment\n                ,\n                \"deathAge\": 80 //Death Age\n                ,\n                \"paymentMode\": \"S\" //A: Annually; S : Semi-annually; M: Monthly\n                ,\n                \"regularPaymentYear\": 20 //years of regular payment: used by regular payment and partial withdrawal\n                ,\n                \"partialWithdrawRate\": 0.50 //% of partial death benefit, used by partial withdrawal\n                ,\n                \"firstSettlementAmount\": 5000 //First installment of death benefit settlement amount, used by increasing payment\n            }\n        },\n        \"withdrawalOptionInfo\": {\n            \"withdrawalOption\": 2, //1：Partial withdrawal；2：Partial Withdrawal - Demonstrate in Annuity Option\n            \"withdrawalType\": 1, //当withdrawalOption 为2才会用；1： Fix Amount Annuity Option(Annual Amount) 2: 3% of Annual Increment of Annuity \n            \"withdrawalPeriodList\": [\n                {\n                    \"withdrawalPeriodType\": 1, //1：Policy Year; 2:Age\n                    \"withdrawalPeriodFrom\": 10,\n                    \"withdrawalPeriodTo\": 15,\n                    \"withdrawalAmount\": 8000.99\n                }\n            ]\n        },\n        \"wealthSwitchOptionList\": [\n            {\n                \"wealthSwitchOption\": 1, //1：balanced；2：Conservative\n                \"wealthSwitchPeriodType\": 1, //1： Policy anniversary；2：Age\n                \"wealthSwitchPeriod\": 25\n            }\n        ]\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/salesIllustration/v1/generateSalesIllustration",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"salesIllustration",
+						"v1",
+						"generateSalesIllustration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sales Illustration Generation Copy 2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "XYQxmd4mQRmvIXjDBjdMUw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"illustrationNo\": \"Pro20240510001\",\n    \"language\": \"en_US\", //en_US/zh_CN/zh_HK\n    \"showPolicyYears\": 30, //0=\"ALL\"(input 0 instead of ALL)/5/10/15/20/25/30/35/40/45/50/55/60/65/70/75/80/85/90/95/100\n    \"showDataDetail\" : \"Y\", //\"Y\" return as JSON format \"N\" return as PDF format\n    \"exportFileType\":\"pdf\", \n    \"needPrint\" : \"N\", // \"Y\" print PDF \"N\" return as JSON\n    \"agentInfo\": {\n        \"agentCode\": \"000001\",\n        \"agentName\": \"AGENT NAME\",\n        \"email\": \"000001@163.com\",\n        \"agentTel\": \"13311113333\",\n        \"agentLevel\" : \"IA1\"\n    },\n    \"coverPageInfo\": {\n        \"coverPageType\": \"Integrated\", //Children/Family/Integrated/Retirement/Youth(Male)\n        \"welcomeMessage\": \"A\"\n   },\n    \"proposalInfo\": {\n        \"currencyId\": 3, //4-USD 3-hk\n        \"chargeMode\": 1, //1-Annual/2-Semi-Annual/4-Monthly\n        \"prepaymentIndi\": \"Y\", //\"Y\",\"N\"\n        \"prepaymentYear\": 1,\n        \"effectiveDate\": \"2023-10-22\",\n        \"holderInfo\": {\n            \"holderName\" : \"Holder Name\",\n            \"holderBirthday\" : \"1980-01-01\",\n            \"holderGender\" : \"F\", //F/M\n            \"holderTitle\" : \"Mr\", //Mr/Mrs/Ms/Miss\n            \"holderSmoking\" : \"N\", //N/Y\n            \"holderAge\" : \"44\"\n        },\n        \"insuredInfo\": {\n            \"insuredNameEn\": \"Jack Tung\",\n            \"insuredNameCn\": \"章\",\n            \"insuredBirthday\": \"\", //Optional, can be \"\" if no birthday. If input both birthday and age, system will calculate based on birthday.\n            \"insuredAge\": \"28\",\n            \"insuredGender\": \"F\", //F/MMY\n            \"insuredSmoking\": \"N\", //\"Y\",\"N\"N\n            \"insuredTitle\": \"Ms\", //Mr/Mrs/Ms/Miss\n            \"relationWithPH \": 1 //\"1\" PH=LA others PH<>LA\n        },\n        \"coverageList\": [\n            {\n                \"productCode\": \"NRRBRCIH\",\n                \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n                \"chargeYear\": 5,\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"coverageYear\": 128,\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"initialAmount\": 200000,\n                \"initialPremium\": 35000\n            },\n            {\n                \"coverageYear\": 128,\n                \"productCode\": \"NHNMW2HR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n               \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 128,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 128,\n                \"productCode\": \"OAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 128,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 75,\n                \"productCode\": \"DAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 75,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            },\n            {\n                \"coverageYear\": 50,\n                \"productCode\": \"MAHR\",\n                \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to certain age\n                \"jobClass\": \"S\", //\"S\", \"25\", \"50\", \"75\", \"100\", \"125\", \"150\", \"175\", \"200\"\n                \"chargeYear\": 50,\n                \"chargePeriod\": \"3\", //2: Pay for certain year; 3: Pay up to certain age\n                \"benefitLevel\": \"1\",\n                \"unit\":\"1\",\n                \"extraLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"resLoading\" : 0, //0: without loading;  \"50\", \"100\" or system will calc by input data\n                \"attachToProduct\": \"NRRBRCIH\"\n            }\n        ],\n        \"premiumOffsetInfo\": {\n            \"premiumOffsetOption\": 2, // 1: start from; 2: end to\n            \"premiumOffsetPeriodType\": 1, //1: year; 2: age\n            \"premiumOffsetPeriod\": 30\n        },\n        \"settlementInfo\": {\n            \"surrenderSettlementInfo\": {\n                \"settlementOption\": \"I\" //I: regular payment; II: increasing payment\n                ,\n                \"surrenderYear\": 60 //policy year upon surrender\n                ,\n                \"paymentMode\": \"S\" //A: Annually; S : Semi-annually; M: Monthly\n                ,\n                \"regularPaymentYear\": 30 //years of regular payment, used by regular payment only\n                ,\n                \"firstSettlementAmount\": 20000 //First Installment of Surrender Settlement Amount, used by increasing payment\n           },\n            \"deathBenefitSettlementInfo\": {\n                \"settlementOption\": \"I\" //I: regular installment; II: partial withdrawal; P: increaseing payment\n                ,\n                \"deathAge\": 80 //Death Age\n                ,\n                \"paymentMode\": \"S\" //A: Annually; S : Semi-annually; M: Monthly\n                ,\n                \"regularPaymentYear\": 20 //years of regular payment: used by regular payment and partial withdrawal\n                ,\n                \"partialWithdrawRate\": 0.50 //% of partial death benefit, used by partial withdrawal\n                ,\n                \"firstSettlementAmount\": 5000 //First installment of death benefit settlement amount, used by increasing payment\n            }\n        },\n        \"withdrawalOptionInfo\": {\n            \"withdrawalOption\": 2, //1：Partial withdrawal；2：Partial Withdrawal - Demonstrate in Annuity Option\n            \"withdrawalType\": 1, //当withdrawalOption 为2才会用；1： Fix Amount Annuity Option(Annual Amount) 2: 3% of Annual Increment of Annuity \n            \"withdrawalPeriodList\": [\n                {\n                    \"withdrawalPeriodType\": 1, //1：Policy Year; 2:Age\n                    \"withdrawalPeriodFrom\": 10,\n                    \"withdrawalPeriodTo\": 15,\n                    \"withdrawalAmount\": 8000.99\n                }\n            ]\n        },\n        \"wealthSwitchOptionList\": [\n            {\n                \"wealthSwitchOption\": 1, //1：balanced；2：Conservative\n                \"wealthSwitchPeriodType\": 1, //1： Policy anniversary；2：Age\n                \"wealthSwitchPeriod\": 25\n            }\n        ]\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/salesIllustration/v1/generateSalesIllustration",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"salesIllustration",
+						"v1",
+						"generateSalesIllustration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "queryPremiumRate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1zELro2vS3mtkt9fdqzNGg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"currencyId\": 4, //4-USD 3-hk\n    \"effectiveDate\": \"2024-10-22\",\n    \"productCode\": \"DPR\",\n    \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n    \"chargeYear\": 5,\n    \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to \n    \"coverageYear\": 128,\n    \"benefitLevel\": null,\n    \"occupationClass\": \"20\",\n    \"benefitPeriodType\": 1,\n    \"benefitPeriod\": 65,\n    \"waitPeriod\": 30,\n    \"insuredInfo\": {\n        \"insuredGender\": \"F\", //F/M\n        \"insuredSmoking\": \"N\", //N/Y\n        \"insuredAge\": \"44\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/rate/v1/queryPremiumRate",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"rate",
+						"v1",
+						"queryPremiumRate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "queryCommissionRate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1zELro2vS3mtkt9fdqzNGg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"currencyId\": 4, //4-USD 3-hk\n    \"effectiveDate\": \"2024-10-22\",\n    \"productCode\": \"DPR\",\n    \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n    \"chargeYear\": 5,\n    \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to \n    \"coverageYear\": 128,\n    \"benefitPeriodType\": \"1\",\n    \"benefitPeriod\": 65,\n    \"waitPeriod\": 30,\n    \"agentCate\": \"1\",\n    \"insuredInfo\": {\n        \"insuredGender\": \"F\", //F/M\n        \"insuredSmoking\": \"N\", //N/Y\n        \"insuredAge\": \"44\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/rate/v1/queryCommissionRate",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"rate",
+						"v1",
+						"queryCommissionRate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "queryWithdrawalAmount",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "KvonFFRaT6uNVnA7OgLE4w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"currencyId\": 4, //4-USD 3-hk\n    \"effectiveDate\": \"2024-10-22\",\n    \"productCode\": \"NRRBRCIUA\",\n    \"chargeMode\": 4,\n    \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n    \"chargeYear\": 5,\n    \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to \n    \"coverageYear\": 128,\n    \"amount\": 1161482,\n    \"modalPremium\": 50030.42,\n    \"insuredInfo\": {\n        \"insuredGender\": \"F\", //F/M\n        \"insuredSmoking\": \"N\", //N/Y\n        \"insuredAge\": \"20\"\n    },\n    \"withdrawalOptionInfo\": {\n        \"withdrawalOption\": 2,\n        \"withdrawalType\": 2,\n        \"withdrawalPeriodList\": [\n            {\n                \"withdrawalPeriodType\": 1,\n                \"withdrawalPeriodFrom\": 20,\n                \"withdrawalPeriodTo\": 25,\n                \"withdrawalAmount\": 140089\n            },\n            {\n                \"withdrawalPeriodType\": 2,\n                \"withdrawalPeriodFrom\": 60,\n                \"withdrawalPeriodTo\": 65\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/validation/v1/queryWithdrawalAmount",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"validation",
+						"v1",
+						"queryWithdrawalAmount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "queryBonusRate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1zELro2vS3mtkt9fdqzNGg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"currencyId\": 4, //4-USD 3-hk\n    \"effectiveDate\": \"2024-10-22\",\n    \"productCode\": \"CPON1\",\n    \"chargePeriod\": \"2\", //2: Pay for certain year; 3: Pay up to certain age\n    \"chargeYear\": 10,\n    \"coveragePeriod\": \"3\", //2: Cover for a certain year; 3:Cover up to \n    \"coverageYear\": 128,\n    \"insuredInfo\": {\n        \"insuredGender\": \"F\", //F/M\n        \"insuredSmoking\": \"N\", //N/Y\n        \"insuredAge\": \"44\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/api/ftl/ftl-pe-bff/rate/v1/queryBonusRate",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"api",
+						"ftl",
+						"ftl-pe-bff",
+						"rate",
+						"v1",
+						"queryBonusRate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"Test01\",\n    \"password\": \"Ebao1234!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ftl-sandbox-hk.insuremo.com/cas/ebao/v2/json/tickets",
+					"protocol": "https",
+					"host": [
+						"ftl-sandbox-hk",
+						"insuremo",
+						"com"
+					],
+					"path": [
+						"cas",
+						"ebao",
+						"v2",
+						"json",
+						"tickets"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
