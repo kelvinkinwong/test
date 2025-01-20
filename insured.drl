@@ -1,0 +1,696 @@
+package rules;
+dialect "java"
+import com.validation.service.entity.drools.ValidationReq;
+import com.validation.service.entity.drools.InvalidItem;
+import com.validation.service.entity.drools.Insured
+import com.validation.service.entity.drools.BasicPlan;
+import com.validation.service.entity.drools.RiderPlans
+import com.validation.service.entity.drools.ProductSetting;
+import com.validation.service.entity.drools.ProductSetting.Ptbt;
+import com.validation.service.entity.drools.ProductSetting.SumInsured.SumInsuredInfo
+import com.validation.service.entity.drools.ProductSetting.ModalPremium
+import com.validation.service.entity.drools.ProductSetting.ModalPremium.ModalPremiumInfo
+import com.validation.service.entity.drools.ProductSetting.PrepaymentOption
+import com.validation.service.entity.drools.ProductSetting.Withdrawal
+import com.validation.service.entity.drools.ProductSetting.DBSettlementOption
+import com.validation.service.entity.drools.ProductSetting.SvSettlementOption
+import com.validation.service.entity.drools.ProductSetting.TermDidLock
+import com.validation.service.entity.drools.CommonSetting
+import com.validation.service.entity.drools.CommonSetting.CodeCoexist
+import com.validation.service.entity.drools.PartialWithdrawal
+import com.validation.service.entity.drools.PartialWithdrawal.WithdrawalInfo
+import com.validation.service.entity.drools.WealthAccumulation
+import com.validation.service.entity.drools.UserSpOptions
+import com.validation.service.entity.drools.DbSettlement
+import com.validation.service.entity.drools.SvSettlement
+import com.validation.service.entity.drools.TerminalDividendLock
+import com.validation.service.entity.drools.TerminalDividendLock.ManualLock
+import java.util.ArrayList;
+import java.util.List;
+import java.math.BigDecimal
+import org.apache.commons.lang3.StringUtils;
+import com.validation.service.util.DateUtils
+import java.util.Set
+import java.util.HashSet
+
+global java.util.List invalidItemList;
+
+
+/**
+ *
+  Validation Rule (IN0001) – No Insured’s Title
+  Condition
+  If no Insured’s title
+
+  Error Info
+  Field Name	Field Value
+  Error Code	IN0001
+  Description (EN)	Please input Insured's Title
+  Description (ZH_TW)	請輸入被保人職稱
+  Description (ZH_CN)	请输入被保人职称
+ */
+rule "Validation Rule (IN0001) – No Insured’s Title"
+    when
+        $valid : ValidationReq(insured != null, insured.title == null || StringUtils.isBlank(insured.title))
+//        ValidationReq(insured != null, insured.title == null || insured.title.isEmpty())
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0001");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人職稱");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人职称");
+        }else{
+            item.setErrMsg("Please input Insured's Title");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0002) – If title is not Mr. /Miss /Ms. /Mrs. /Dr.
+ Condition
+ if title != Mr. OR Miss OR Ms. OR Mrs. OR Dr.
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0002
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	'XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0002) – If title is not Mr. /Miss /Ms. /Mrs. /Dr."
+    when
+        // 绑定ValidationReq中的 insured.title 变量
+        $valid : ValidationReq(insured != null, insured.title != null, !StringUtils.isBlank(insured.title) , !insured.title.equals("Mr.") && !insured.title.equals("Miss") && !insured.title.equals("Ms.") && !insured.title.equals("Mrs.") && !insured.title.equals("Dr."))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0002");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getTitle() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getTitle() + "'不正确的值");
+        }else{
+            item.setErrMsg("'" + $valid.getInsured().getTitle() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0003) – No Insured’s Last Name
+ Condition
+ if no Insured’s lastName
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0003
+ Description (EN)	Please input Insured's Last Name.
+ Description (ZH_TW)	請輸入被保人姓氏
+ Description (ZH_CN)	请输入被保人姓氏
+ */
+rule "Validation Rule (IN0003) – No Insured’s Last Name"
+    when
+        $valid : ValidationReq(insured != null, insured.lastName == null || StringUtils.isBlank(insured.lastName))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0003");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人姓氏");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人姓氏");
+        }else {
+            item.setErrMsg("Please input Insured's Last Name.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ * Validation Rule (IN0004) – Last Name has more than 30 letters
+   Condition
+   If Last Name has more than 30 letters.
+   Error Info
+   Field Name	Field Value
+   Error Code	IN0004
+   Description (EN)	'XXXX' incorrect value
+   Description (TC)	'XXXXX'不正確的值
+   Description (SC)	'XXXXX'不正确的值
+ *
+ *
+ */
+rule "Validation Rule (IN0004) – Last Name has more than 30 letters"
+    when
+        $valid : ValidationReq(insured != null, insured.lastName != null, !StringUtils.isBlank(insured.lastName), insured.lastName.length() > 30)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0004");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getLastName() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getLastName() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getLastName() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0005) – First Name has more than 30 letters
+ Condition
+ if firstName has more than 30 letters
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0005
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	'XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0005) – First Name has more than 30 letters"
+    when
+        $valid : ValidationReq(insured != null, insured.firstName != null, !StringUtils.isBlank(insured.firstName), insured.firstName.length() > 30)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0004");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getFirstName() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getFirstName() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getFirstName() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0006) – Last Name (Chinese) has more than 30 letters
+ Condition
+ if lastNameChi has more than 30 letters
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0006
+ Description (EN)	''XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0006) – Last Name (Chinese) has more than 30 letters"
+    when
+        $valid : ValidationReq(insured != null, insured.lastNameChi != null, !StringUtils.isBlank(insured.lastNameChi), insured.lastNameChi.length() > 30)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0006");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getLastNameChi() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getLastNameChi() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getLastNameChi() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0007) – First Name (Chinese) has more than 30 letters
+ Condition
+ if firstNameChi has more than 30 letters
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0007
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	‘XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0007) – First Name (Chinese) has more than 30 letters"
+    when
+        $valid : ValidationReq(insured != null, insured.firstNameChi != null, !StringUtils.isBlank(insured.firstNameChi), insured.firstNameChi.length() > 30)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0007");
+        if ($valid.getLang().equals("zh_TW"))
+            item.setErrMsg("'" + $valid.getInsured().getFirstNameChi() + "'不正確的值");
+        else if ($valid.getLang().equals("zh_CN"))
+            item.setErrMsg("'" + $valid.getInsured().getFirstNameChi() + "'不正确的值");
+        else
+            item.setErrMsg("'" + $valid.getInsured().getFirstNameChi() + "' incorrect value");
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0008) – No Insured’s Gender
+ Condition
+ if no Insured’s gender
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0008
+ Description (EN)	Please input Insured's Gender.
+ Description (ZH_TW)	請輸入被保人性別
+ Description (ZH_CN)	请输入被保人性别
+ */
+rule "Validation Rule (IN0008) – No Insured's Gender"
+    when
+        $valid:ValidationReq(insured != null, insured.gender == null || StringUtils.isBlank(insured.gender))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0007");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人性別");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人性别");
+        }else {
+            item.setErrMsg("Please input Insured's Gender.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0009) – Not equal to Male or Female
+ Condition
+ if gender != Male OR  Female
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0009
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	‘XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0009) – Not equal to Male or Female"
+    when
+        $valid : ValidationReq(insured != null, !StringUtils.isBlank(insured.gender), insured.gender != 'M' && insured.gender != 'F')
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0009");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getGender() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getGender() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getGender() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0010) – No Insured’s age
+ Condition
+ if no Insured’s age
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0010
+ Description (EN)	Please input Insured's Age.
+ Description (ZH_TW)	請輸入被保人年齡
+ Description (ZH_CN)	请输入被保人年龄
+ */
+rule "Validation Rule (IN0010) – No Insured’s age"
+    when
+        $valid:ValidationReq(insured != null, insured.age == null)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0010");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人年齡");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人年龄");
+        }else{
+            item.setErrMsg("Please input Insured's Age.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0011) – Age is not an integer
+ Condition
+ if age is not an integer
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0011
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	‘XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0011) – Age is not an integer"
+    when
+        $valid:ValidationReq(insured != null, insured.age != null, insured.age < 0)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0011");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getAge() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getAge() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getAge() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0012) – insured age not between XX and XX
+ Condition
+ if insured age not between XX and XX (age from product setting)
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0012
+ Description (EN)	Issue age for <PlanName> must be between XX and XX(age from product setting).
+ Description (ZH_TW)	<PlanName>的投保年齡必須在XX到XX歲(age from product setting)之間
+ Description (ZH_CN)	<PlanName>的投保年龄必须在XX到XX岁(age from product setting)之间
+ */
+rule "Validation Rule (IN0012) – insured age not between XX and XX"
+when
+    // 匹配主数据对象
+    $validationReq: ValidationReq(
+        insured != null,
+        insured.age != null,
+        insured.age >= 0,
+        insured.gender != null,
+        productSetting != null && !productSetting.isEmpty()
+    )
+    $userSpOptions: UserSpOptions() from $validationReq.getUserSpOptions()
+    $productSetting: ProductSetting(ptbt != null) from $validationReq.productSetting
+//    $ptbt: Ptbt(paymentTerm != null , paymentTerm.equals(String.valueOf($validationReq.basicPlan.premiumYear))) from $productSetting.ptbt
+then
+    //System.out.println("Validation Rule (IN0011) – insured age not between XX and XX");
+    // 判断逻辑
+    boolean isValid = false;
+    Integer minAge = 0;
+    Integer maxAge = Integer.MAX_VALUE;
+    // 获取最匹配的ptbt(默认匹配第1个ptbt,优先匹配与basicPlan的paymentTerm相同的ptbt)
+    Ptbt $ptbt = $productSetting.getPtbt().get(0);
+    for (Ptbt ptbt : $productSetting.getPtbt()) {
+        if (ptbt.getPaymentTerm().equals(String.valueOf($validationReq.getBasicPlan().getPremiumYear()))) {
+            $ptbt = ptbt;
+            break;
+        }
+    }
+    if ($validationReq.getInsured().getGender().equals("M")) {
+        minAge = $ptbt.getMinAgeMale();
+        maxAge = $ptbt.getMaxAgeMale();
+    } else if ($validationReq.getInsured().getGender().equals("F")) {
+        minAge = $ptbt.getMinAgeFemale();
+        maxAge = $ptbt.getMaxAgeFemale();
+    }
+    // 如果用户有特殊权限，maxAge设置为整数最大值，即不限制最大年龄
+    if ($userSpOptions != null && "Y".equals($userSpOptions.getSpecialQuote())){
+        maxAge = Integer.MAX_VALUE;
+    }
+    isValid = $validationReq.getInsured().getAge() >= minAge && $validationReq.getInsured().getAge() <= maxAge;
+    // 根据语言设置获取planName
+    String planName = "";
+    if ($validationReq.getLang().equals("zh_TW")) {
+        planName = $productSetting.getPlanName().getTchi();
+    } else if ($validationReq.getLang().equals("zh_CN")) {
+        planName = $productSetting.getPlanName().getSchi();
+    } else {
+        planName = $productSetting.getPlanName().getEng();
+    }
+    // 根据校验结果记录到全局变量
+    if(!isValid){
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0012");
+        if($validationReq.getLang().equals("zh_TW")){
+            item.setErrMsg(planName + "的投保年齡必須在" + minAge + "到" + maxAge + "歲之間");
+        }else if($validationReq.getLang().equals("zh_CN")){
+            item.setErrMsg(planName + "的投保年龄必须在" + minAge + "到" + maxAge + "岁之间");
+        }else{
+            item.setErrMsg("Issue age for " + planName + " must be between " + minAge + " and " + maxAge);
+        }
+        invalidItemList.add(item);
+    }
+end
+
+/**
+ *
+ Validation Rule (IN0013) – DOB does not follow the format of YYYY-MM-DD
+ Condition
+ if dob is a date
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0013
+ Description (EN)	Please enter a valid Insured's DOB!
+ Description (ZH_TW)	請輸入有效的被保人生日！
+ Description (ZH_CN)	请输入有效的被保人生日！
+ */
+rule "Validation Rule (IN0013) – DOB does not follow the format of YYYY-MM-DD"
+    when
+        $valid:ValidationReq(insured != null, insured.dob != null, !StringUtils.isBlank(insured.dob), !DateUtils.isValidDate(insured.dob))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0013");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入有效的被保人生日！");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入有效的被保人生日！");
+        }else {
+            item.setErrMsg("Please enter a valid Insured's DOB!");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0014) – Actual age not an integer
+ Condition
+ if actualAge not an integer
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0013
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	‘XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0014) – Actual age not an integer"
+    when
+        $valid:ValidationReq(insured != null, insured.actualAge != null, insured.actualAge < 0)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0014");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getActualAge() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getActualAge() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getActualAge() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0015) – Age not equal to Actual Age and Age not equal Actual Age-1
+ Condition
+ if age != actualAge AND age != (actualAge  - 1)
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0015
+ Description (EN)	"Proposal Age" must equal to client's "Actual Age" or 1 yr smaller.  For generating proposal with different ages for comparison purpose, please create a new one instead.
+ Description (ZH_TW)	建議書年齡必須等如客戶之"實際年齡"或小一歲。 如需製作不同投保年齡的建議書供客戶作比較，請另建立新建議書。
+ Description (ZH_CN)	建议书年龄必须等如客户之"实际年龄"或小一岁。 如需制作不同投保年龄的建议书供客户作比较，请另建立新建议书。
+ */
+rule "Validation Rule (IN0015) – Age not equal to Actual Age and Age not equal Actual Age-1"
+    when
+        $valid:ValidationReq(insured != null, insured.age != null, insured.actualAge != null, insured.age != insured.actualAge && insured.age != insured.actualAge - 1)
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0015");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("建議書年齡必須等如客戶之\"實際年齡\"或小一歲。 如需製作不同投保年齡的建議書供客戶作比較，請另建立新建議書。");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("建议书年龄必须等如客户之\"实际年龄\"或小一岁。 如需制作不同投保年龄的建议书供客户作比较，请另建立新建议书。");
+        }else {
+            item.setErrMsg("\"Proposal Age\" must equal to client's \"Actual Age\" or 1 yr smaller.  For generating proposal with different ages for comparison purpose, please create a new one instead.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0016) – No Insured’s Smoking Habit（Insured’s age≥18）
+ Condition
+ If no Insured’s Smoking Habit and Insured’s age≥18.
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0016
+ Description (EN)	Please input Insured's Smoking Habit.
+ Description (TC)	請輸入被保人吸烟习惯
+ Description (SC)	请输入被保人吸菸習慣
+ *
+ */
+rule "Validation Rule (IN0016) – No Insured’s Smoking Habit（Insured’s age≥18）"
+    when
+        $valid : ValidationReq(insured != null, insured.age != null, insured.age >= 18, insured.smokingHabit == null || StringUtils.isBlank(insured.smokingHabit))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0016");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人吸煙習慣");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人吸烟习惯");
+        }else {
+            item.setErrMsg("Please input Insured's Smoking Habit.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0017) – Not equal to Smoke/ Non- Smoke
+ Condition
+ if smokingHabit != Smoker OR Non-Smoker
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0017
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	‘XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0017) – Not equal to Smoke/ Non- Smoke"
+    when
+        $valid : ValidationReq(insured != null, !StringUtils.isBlank(insured.smokingHabit), insured.smokingHabit != 'Y' && insured.smokingHabit != 'N')
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0017");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getSmokingHabit() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getSmokingHabit() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getSmokingHabit() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end
+
+
+/**
+ *
+ Validation Rule (IN0018) – No Occupation Code
+ Condition
+ if no occupationCode
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0018
+ Description (EN)	Please input Insured's Occupation Code.
+ Description (ZH_TW)	請輸入被保人的職業代碼。
+ Description (ZH_CN)	请输入被保人的职业代码。
+ */
+rule "Validation Rule (IN0018) – No Occupation Code"
+    when
+        $valid : ValidationReq(insured != null, insured.occupationCode == null || StringUtils.isBlank(insured.occupationCode))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0018");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人的職業代碼。");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人的职业代码。");
+        }else {
+            item.setErrMsg("Please input Insured's Occupation Code.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ *
+ Validation Rule (IN0019) – Occupation Code is not number
+ Condition
+ If Occupation Code is not number.
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0019
+ Description (EN)	'XXXX' incorrect value
+ Description (TC)	'XXXXX'不正確的值
+ Description (SC)	'XXXXX'不正确的值
+ *
+ */
+//rule "Validation Rule (IN0019) – Occupation Code is not number"
+//    when
+//        $valid : ValidationReq(insured != null, insured.occupationCode != null, !StringUtils.isNumeric(insured.occupationCode))
+//    then
+//        InvalidItem item = new InvalidItem();
+//        item.setErrCode("IN0019");
+//        if($valid.getLang().equals("zh_TW")){
+//            item.setErrMsg("'" + $valid.getInsured().getOccupationCode() + "'不正確的值");
+//        }else if($valid.getLang().equals("zh_CN")){
+//            item.setErrMsg("'" + $valid.getInsured().getOccupationCode() + "'不正确的值");
+//        }else {
+//            item.setErrMsg("'" + $valid.getInsured().getOccupationCode() + "' incorrect value");
+//        }
+//        invalidItemList.add(item);
+//end
+
+/**
+ *
+ Validation Rule (IN0019) – No Country of Residence
+ Condition
+ if no countryResidence
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0019
+ Description (EN)	Please input Insured's Country of Residence.
+ Description (ZH_TW)	請輸入被保人的居住國家。
+ Description (ZH_CN)	请输入被保人的居住国家。
+ */
+rule "Validation Rule (IN0019) – No Country of Residence"
+    when
+        $valid : ValidationReq(insured != null, insured.countryResidence == null || StringUtils.isBlank(insured.countryResidence))
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0019");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("請輸入被保人的居住國家。");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("请输入被保人的居住国家。");
+        }else {
+            item.setErrMsg("Please input Insured's Country of Residence.");
+        }
+        invalidItemList.add(item);
+end
+
+/**
+ *
+ Validation Rule (IN0020) – Not equal to HK Resident/ non-Mainlander/ Mainlander
+ Condition
+ if countryResidence != HK Resident / non-Mainlander OR Mainlander
+
+ Error Info
+ Field Name	Field Value
+ Error Code	IN0021
+ Description (EN)	'XXXX' incorrect value
+ Description (ZH_TW)	'XXXXX'不正確的值
+ Description (ZH_CN)	‘XXXXX'不正确的值
+ */
+rule "Validation Rule (IN0020) – Not equal to HK Resident/ non-Mainlander/ Mainlander"
+    when
+        $valid : ValidationReq(insured != null, !StringUtils.isBlank(insured.countryResidence), insured.countryResidence != 'HK Resident' && insured.countryResidence != 'HK' && insured.countryResidence != 'CN')
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("IN0020");
+        if($valid.getLang().equals("zh_TW")){
+            item.setErrMsg("'" + $valid.getInsured().getCountryResidence() + "'不正確的值");
+        }else if($valid.getLang().equals("zh_CN")){
+            item.setErrMsg("'" + $valid.getInsured().getCountryResidence() + "'不正确的值");
+        }else {
+            item.setErrMsg("'" + $valid.getInsured().getCountryResidence() + "' incorrect value");
+        }
+        invalidItemList.add(item);
+end

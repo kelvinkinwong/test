@@ -1,0 +1,385 @@
+package rules;
+dialect "java"
+import com.validation.service.entity.drools.ValidationReq;
+import com.validation.service.entity.drools.InvalidItem;
+import com.validation.service.entity.drools.Insured
+import com.validation.service.entity.drools.BasicPlan;
+import com.validation.service.entity.drools.RiderPlans
+import com.validation.service.entity.drools.ProductSetting;
+import com.validation.service.entity.drools.ProductSetting.Ptbt;
+import com.validation.service.entity.drools.ProductSetting.SumInsured.SumInsuredInfo
+import com.validation.service.entity.drools.ProductSetting.ModalPremium
+import com.validation.service.entity.drools.ProductSetting.ModalPremium.ModalPremiumInfo
+import com.validation.service.entity.drools.ProductSetting.PrepaymentOption
+import com.validation.service.entity.drools.ProductSetting.Withdrawal
+import com.validation.service.entity.drools.ProductSetting.DBSettlementOption
+import com.validation.service.entity.drools.ProductSetting.SvSettlementOption
+import com.validation.service.entity.drools.ProductSetting.TermDidLock
+import com.validation.service.entity.drools.CommonSetting
+import com.validation.service.entity.drools.CommonSetting.CodeCoexist
+import com.validation.service.entity.drools.PartialWithdrawal
+import com.validation.service.entity.drools.PartialWithdrawal.WithdrawalInfo
+import com.validation.service.entity.drools.WealthAccumulation
+import com.validation.service.entity.drools.UserSpOptions
+import com.validation.service.entity.drools.DbSettlement
+import com.validation.service.entity.drools.SvSettlement
+import com.validation.service.entity.drools.TerminalDividendLock
+import com.validation.service.entity.drools.TerminalDividendLock.ManualLock
+import java.util.ArrayList;
+import java.util.List;
+import java.math.BigDecimal
+import org.apache.commons.lang3.StringUtils;
+import com.validation.service.util.DateUtils
+import java.util.Set
+import java.util.HashSet
+
+global java.util.List invalidItemList;
+
+/**
+ *
+ 3.2.6.1Validation Rule (WD0001) – No Withdrawal Start Year, Withdrawal End Year or Withdrawal Amount
+ Condition
+
+ (If one of them has a value, the other two are required)
+ if Withdrawal Amount = 100 and (to-Year is empty OR from-Year is empty)
+
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0001
+ Description (EN)	Please input [Withdrawal Start Year/ Withdrawal End Year/ withdrawal amount].
+ Description (TC)	請輸入[開始年份/終止年份/提取金額]。
+ Description (SC)	请输入[开始年份/终止年份/提取金额]。
+ */
+
+ rule "Validation Rule (WD0001) – No Withdrawal Start Year, Withdrawal End Year or Withdrawal Amount"
+      when
+          $validReq : ValidationReq(partialWithdrawal != null)
+          $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+          $withdrawalInfo : WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo()
+      then
+          if($withdrawalInfo.getAmount() == null || $withdrawalInfo.getFromYear() == null || $withdrawalInfo.getToYear() == null){
+              InvalidItem item = new InvalidItem();
+              item.setErrCode("WD0001");
+              if($validReq.getLang().equals("zh_TW")){
+                  item.setErrMsg("請輸入[開始年份/終止年份/提取金額]。");
+              }else if($validReq.getLang().equals("zh_CN")){
+                  item.setErrMsg("请输入[开始年份/终止年份/提取金额]。");
+              }else{
+                  item.setErrMsg("Please input [Withdrawal Start Year/ Withdrawal End Year/ withdrawal amount].");
+              }
+              invalidItemList.add(item);
+          }
+
+  end
+
+/**
+ *
+ 3.2.6.2Validation Rule (WD0002) – Input is not an Integer.
+ UI
+ The input has format limitations, so the tip will not display.
+ Condition
+ If amount OR to-Year OR from-Year is not an integer.
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0002
+ Description (EN)	[Withdrawal Start Year/ Withdrawal End Year/ withdrawal amount] incorrect value.
+ Description (TC)	[開始年份/終止年份/提取金額]不正確的值。
+ Description (SC)	[开始年份/终止年份/提取金额]不正确的值。
+ */
+ rule "Validation Rule (WD0002) – Input is not an Integer"
+      when
+          $validReq : ValidationReq(partialWithdrawal != null)
+          $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+          $withdrawalInfo : WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo()
+      then
+          if(($withdrawalInfo.getAmount() != null && $withdrawalInfo.getAmount().intValue() < 0)
+                || ($withdrawalInfo.getFromYear() != null && $withdrawalInfo.getFromYear().intValue() < 0)
+                || ($withdrawalInfo.getToYear() != null && $withdrawalInfo.getToYear().intValue() < 0)
+          ){
+              InvalidItem item = new InvalidItem();
+              item.setErrCode("WD0002");
+              if($validReq.getLang().equals("zh_TW")){
+                  item.setErrMsg("[開始年份/終止年份/提取金額]不正確的值。");
+              }else if($validReq.getLang().equals("zh_CN")){
+                  item.setErrMsg("[开始年份/终止年份/提取金额]不正确的值。");
+              }else{
+                  item.setErrMsg("[Withdrawal Start Year/ Withdrawal End Year/ withdrawal amount] incorrect value.");
+              }
+              invalidItemList.add(item);
+          }
+
+  end
+
+/**
+ *
+ 3.2.6.3Validation Rule (WD0003) – Withdrawal Amount has more than Maximum Withdrawal Amount
+ UI
+
+ Condition
+ If Withdrawal Amount >maxWd# .
+ #Remark: If product has Wealth Booster Option,The maxWd should be conducted under the Wealth Booster option.
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0003
+ Description (EN)	There is insufficient fund for withdrawal.
+ Description (TC)	資金不足夠作出提款。
+ Description (SC)	资金不足够作出提款。
+ */
+    rule "Validation Rule (WD0003) – Withdrawal Amount has more than Maximum Withdrawal Amount"
+        when
+            $validReq : ValidationReq(partialWithdrawal != null)
+            $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+            $withdrawalInfo : WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo()
+        then
+            if($withdrawalInfo.getAmount() != null && $withdrawalInfo.getAmount().compareTo($withdrawalInfo.getMaxWd()) > 0){
+                InvalidItem item = new InvalidItem();
+                item.setErrCode("WD0003");
+                if($validReq.getLang().equals("zh_TW")){
+                    item.setErrMsg("資金不足夠作出提款。");
+                }else if($validReq.getLang().equals("zh_CN")){
+                    item.setErrMsg("资金不足够作出提款。");
+                }else{
+                    item.setErrMsg("There is insufficient fund for withdrawal.");
+                }
+                invalidItemList.add(item);
+            }
+
+    end
+
+/**
+ *
+ Validation Rule (WD0004) – Withdrawal Amount has more than Maximum Withdrawal Amount and less than Wealth Booster Option Withdrawal Amount
+ UI
+
+ Condition
+ If maxWd < Withdrawal Amount < Wealth Booster Option Withdrawal Amount .
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0004
+ Description (EN)	Please note that your selected withdrawal schedule will result in unit reduction below the minimum requirement without exercising Wealth Booster Option, therefore the proposal illustration will not be exactly illustrating your chosen withdrawal scenario. For details, please refer to the withdrawal period and amounts illustrated in the withdrawal illustration of the proposal.
+
+ While for exercising Wealth Booster Option on the 10th policy anniversary, the proposal will be illustrating according to your chosen withdrawal scenario.
+ Description (TC)	請注意，你所選擇之提取情境於沒有行使財富躍進選項下會導致投保單位減至低於最低要求，因此於建議書內未能完全按你所選擇的提取情境演示，詳情請參閱建議書內提取演示之提取年期及金額。
+
+ 而於第10個保單週年日行使財富躍進選項下，建議書將按你所選擇的提取情境演示。
+ Description (SC)	请注意，你所选择之提取情境于没有行使财富跃进选项下会导致投保单位减至低于最低要求，因此于建议书内未能完全按你所选择的提取情境演示，详情请参阅建议书内提取演示之提取年期及金额。
+ 而于第10个保单周年日行使财富跃进选项下，建议书将按你所选择的提取情境演示。
+ */
+rule "Validation Rule (WD0004) – Withdrawal Amount has more than Maximum Withdrawal Amount and less than Wealth Booster Option Withdrawal Amount"
+    when
+        $validReq : ValidationReq(partialWithdrawal != null)
+        $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+        $withdrawalInfo : WithdrawalInfo(amount != null, maxWd != null ,wealthBoosterMaxWd != null) from $partialWithdrawal.getWithdrawalInfo()
+    then
+        if($withdrawalInfo.getAmount() != null && $withdrawalInfo.getAmount().compareTo($withdrawalInfo.getMaxWd()) > 0
+            && $withdrawalInfo.getAmount().compareTo($withdrawalInfo.getWealthBoosterMaxWd()) < 0){
+            InvalidItem item = new InvalidItem();
+            item.setErrType("1");
+            item.setErrCode("WD0004");
+            if($validReq.getLang().equals("zh_TW")){
+                item.setErrMsg("請注意，你所選擇之提取情境於沒有行使財富躍進選項下會導致投保單位減至低於最低要求，因此於建議書內未能完全按你所選擇的提取情境演示，詳情請參閱建議書內提取演示之提取年期及金額。" +
+                        "而於第10個保單週年日行使財富躍進選項下，建議書將按你所選擇的提取情境演示。");
+            }else if($validReq.getLang().equals("zh_CN")){
+                item.setErrMsg("请注意，你所选择之提取情境于没有行使财富跃进选项下会导致投保单位减至低于最低要求，因此于建议书内未能完全按你所选择的提取情境演示，详情请参阅建议书内提取演示之提取年期及金额。" +
+                        "而于第10个保单周年日行使财富跃进选项下，建议书将按你所选择的提取情境演示。");
+            }else{
+                item.setErrMsg("Please note that your selected withdrawal schedule will result in unit reduction below the minimum requirement without exercising Wealth Booster Option, therefore the proposal illustration will not be exactly illustrating your chosen withdrawal scenario. For details, please refer to the withdrawal period and amounts illustrated in the withdrawal illustration of the proposal." +
+                        "While for exercising Wealth Booster Option on the 10th policy anniversary, the proposal will be illustrating according to your chosen withdrawal scenario.");
+            }
+            invalidItemList.add(item);
+        }
+end
+
+
+
+ /**
+  *
+  3.2.6.5Validation Rule (WD0005) – Withdrawal Amount is less than Minimum Partial Withdrawal
+  UI
+
+  Condition
+  If Withdrawal Amount <minWd .
+  Error Info
+  Field Name	Field Value
+  Error Code	WD0005
+  Description (EN)	Min Partial Withdrawal is [US Dollar/HKD Dollar]600.00.
+  Description (TC)	最低部份提取金額為[美元/港元]600.00.
+  Description (SC)	最低部份提取金额为[美元/港元]600.00.
+  */
+  rule "Validation Rule (WA0005) - Withdrawal Amount has less than Minimum Partial Withdrawal"
+          when
+              $validReq : ValidationReq(partialWithdrawal != null)
+              $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+              $withdrawalInfo : WithdrawalInfo(amount != null) from $partialWithdrawal.getWithdrawalInfo()
+              $basicPlan : BasicPlan() from $validReq.getBasicPlan()
+              $productSetting : ProductSetting(planCode == $basicPlan.planCode) from $validReq.getProductSetting()
+              $withdrawal : Withdrawal() from $productSetting.getWithdrawal()
+          then
+              if($withdrawalInfo.getAmount() != null && $withdrawalInfo.getAmount().compareTo(new BigDecimal($withdrawal.getMinWD())) < 0){
+                  InvalidItem item = new InvalidItem();
+                  item.setErrCode("WA0005");
+                  if($validReq.getLang().equals("zh_TW")){
+                      item.setErrMsg("最低部份提取金額為[美元/港元]600.00.");
+                  }else if($validReq.getLang().equals("zh_CN")){
+                      item.setErrMsg("最低部份提取金额为[美元/港元]600.00.");
+                  }else{
+                      item.setErrMsg("Min Partial Withdrawal is [US Dollar/HKD Dollar]600.00.");
+                  }
+                  invalidItemList.add(item);
+              }
+      end
+
+/**
+ *
+ 3.2.6.6Validation Rule (WD0006) – Withdrawal start-year is larger than (Basic BT - insured age)
+ UI
+
+ Condition
+ If from-year > (Basic BT - insured age) .
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0006
+ Description (EN)	Withdrawal end-year or Withdrawal start-year must be less than and equal to { Plan benefit term - insured age }
+ Description (TC)	提取終止年份或提取開始年份必須小於等於{Plan benefit term - insured age }
+ Description (SC)	提取终止年份或提取开始年份必须小于等于{ Plan benefit term - insured age }
+ */
+rule "Validation Rule (WD0006) – Withdrawal start-year is larger than (Basic BT - insured age)"
+    when
+        $validReq : ValidationReq(partialWithdrawal != null)
+        $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+        $withdrawalInfo : WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo()
+        $insured : Insured() from $validReq.getInsured()
+        $basicPlan : BasicPlan() from $validReq.getBasicPlan()
+        $productSetting : ProductSetting(planCode == $basicPlan.planCode) from $validReq.getProductSetting()
+        $ptbt : Ptbt() from $productSetting.getPtbt()
+    then
+        String planBenefitTermStr = $ptbt.getBenefitTerm();
+        Integer planBenefitTerm = Integer.parseInt(planBenefitTermStr);
+        if($withdrawalInfo.getFromYear() != null && $withdrawalInfo.getFromYear() > planBenefitTerm - $insured.getAge()){
+            InvalidItem item = new InvalidItem();
+            item.setErrCode("WD0006");
+            if($validReq.getLang().equals("zh_TW")){
+                item.setErrMsg("提取終止年份或提取開始年份必須小於等於{Plan benefit term - insured age }");
+            }else if($validReq.getLang().equals("zh_CN")){
+                item.setErrMsg("提取终止年份或提取开始年份必须小于等于{ Plan benefit term - insured age }");
+            }else{
+                item.setErrMsg("Withdrawal end-year or Withdrawal start-year must be less than and equal to { Plan benefit term - insured age }");
+            }
+            invalidItemList.add(item);
+        }
+
+end
+
+/**
+ *
+ 3.2.6.7Validation Rule (WD0007) – Withdrawal end-year is larger than (Basic BT - insured age)
+ UI
+
+ Condition
+ If to-year > (Basic BT - insured age) .
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0007
+ Description (EN)	Withdrawal end-year or Withdrawal start-year must be less than and equal to { Plan benefit term - insured age }
+ Description (TC)	提取終止年份或提取開始年份必須小於等於{Plan benefit term - insured age }
+ Description (SC)	提取终止年份或提取开始年份必须小于等于{ Plan benefit term - insured age }
+ */
+rule "Validation Rule (WD0007) – Withdrawal end-year is larger than (Basic BT - insured age)"
+    when
+        $validReq : ValidationReq(partialWithdrawal != null)
+        $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+        $withdrawalInfo : WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo()
+        $insured : Insured() from $validReq.getInsured()
+        $basicPlan : BasicPlan() from $validReq.getBasicPlan()
+        $productSetting : ProductSetting(planCode == $basicPlan.planCode) from $validReq.getProductSetting()
+        $ptbt : Ptbt() from $productSetting.getPtbt()
+    then
+        String planBenefitTermStr = $ptbt.getBenefitTerm();
+        Integer planBenefitTerm = Integer.parseInt(planBenefitTermStr);
+        if($withdrawalInfo.getToYear() != null && $withdrawalInfo.getToYear() > planBenefitTerm - $insured.getAge()){
+            InvalidItem item = new InvalidItem();
+            item.setErrCode("WD0007");
+            if($validReq.getLang().equals("zh_TW")){
+                item.setErrMsg("提取終止年份或提取開始年份必須小於等於{Plan benefit term - insured age }");
+            }else if($validReq.getLang().equals("zh_CN")){
+                item.setErrMsg("提取终止年份或提取开始年份必须小于等于{ Plan benefit term - insured age }");
+            }else{
+                item.setErrMsg("Withdrawal end-year or Withdrawal start-year must be less than and equal to { Plan benefit term - insured age }");
+            }
+            invalidItemList.add(item);
+        }
+end
+
+/**
+ *
+ 3.2.6.8Validation Rule (WD0008) – Withdrawal Start Year is larger than Withdrawal End Year
+ UI
+
+ Condition
+ If from-year >to-year
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0008
+ Description (EN)	For Withdrawal, End Year must be larger than or equal to Start Year.
+ Description (TC)	提取終止年份必須大於或等於開始年份。
+ Description (SC)	提取终止年份必须大于或等于开始年份。
+ */
+rule "Validation Rule (WD0008) – Withdrawal Start Year is larger than Withdrawal End Year"
+    when
+        $validReq : ValidationReq(partialWithdrawal != null)
+        $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+        $withdrawalInfo : WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo()
+    then
+        if($withdrawalInfo.getFromYear() != null && $withdrawalInfo.getToYear() != null && $withdrawalInfo.getFromYear() > $withdrawalInfo.getToYear()){
+            InvalidItem item = new InvalidItem();
+            item.setErrCode("WD0008");
+            if($validReq.getLang().equals("zh_TW")){
+                item.setErrMsg("提取終止年份必須大於或等於開始年份。");
+            }else if($validReq.getLang().equals("zh_CN")){
+                item.setErrMsg("提取终止年份必须大于或等于开始年份。");
+            }else{
+                item.setErrMsg("For Withdrawal, End Year must be larger than or equal to Start Year.");
+            }
+            invalidItemList.add(item);
+        }
+end
+
+/**
+ *
+ 3.2.6.9Validation Rule (WD0009) – Two withdrawal period overlap
+ UI
+
+ Condition
+ If two withdrawal period overlap
+ Error Info
+ Field Name	Field Value
+ Error Code	WD0009
+ Description (EN)	Inputted Years of Withdrawal overlapped.
+ Description (TC)	輸入之部份提取年份重疊。
+ Description (SC)	输入之部份提取年份重叠。
+ *
+ * 补充实现逻辑说明：$validReq.getPartialWithdrawal().getWithdrawalInfo()返回的是一个List，所以需要对List中的元素进行两两比较，判断是否有重叠的情况
+ *
+ */
+rule "Validation Rule (WD0009) – Two withdrawal period overlap"
+    when
+        $validReq : ValidationReq(partialWithdrawal != null)
+        $partialWithdrawal : PartialWithdrawal(withdrawalOption == 'A') from $validReq.getPartialWithdrawal()
+        $withdrawalInfoList : List( size > 1 ) from collect(WithdrawalInfo() from $partialWithdrawal.getWithdrawalInfo())
+        $withdrawalInfo1 : WithdrawalInfo() from $withdrawalInfoList
+        $withdrawalInfo2 : WithdrawalInfo() from $withdrawalInfoList
+        eval($withdrawalInfo1 != $withdrawalInfo2 && $withdrawalInfo1.getFromYear() <= $withdrawalInfo2.getToYear() && $withdrawalInfo1.getToYear() >= $withdrawalInfo2.getFromYear())
+    then
+        InvalidItem item = new InvalidItem();
+        item.setErrCode("WD0009");
+        if($validReq.getLang().equals("zh_TW")){
+            item.setErrMsg("輸入之部份提取年份重疊。");
+        }else if($validReq.getLang().equals("zh_CN")){
+            item.setErrMsg("输入之部份提取年份重叠。");
+        }else{
+            item.setErrMsg("Inputted Years of Withdrawal overlapped.");
+        }
+        invalidItemList.add(item);
+end
+
+
