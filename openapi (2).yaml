@@ -1,0 +1,258 @@
+openapi: 3.0.3
+info:
+  title: Campaign Setup - OpenAPI 3.0
+  description:
+    Campaign and Coupon API for Campaign setup
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: kelvink.wong@ctflife.com.hk
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://to_be_provided/api/v3
+tags:
+  - name: campaign
+    description: Everything about Campaign
+paths:
+  /setup/campaign:
+    post:
+      tags:
+        - settings
+      summary: Create a new Campaign
+      description: Create a new Campaign in CCS and eBAO
+      operationId: createCampaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    put:
+      tags:
+        - settings
+      summary: Update an existing Campaign
+      description: Update an existing in CCS and eBAO
+      operationId: updateCampaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  /setup/campaign/{campaignCode}:
+    get:
+      tags:
+        - setup
+      summary: Find Campaign by CampaignCode (for Setup)
+      description: Return Campaign with Campaign Code matching the input
+      operationId: getCampaignByCampaignCode
+      parameters:
+        - name: campaignCode
+          in: path
+          description: Campaign Code of campaign that needs to be fetched
+          required: true
+          schema:
+            type: string
+            example: Q2HC16825
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        '400':
+          description: Invalid Code supplied
+        '404':
+          description: Campaign not found
+    delete:
+      tags:
+        - setup
+      summary: Delete campaign by campaign code
+      description: Delete Campaign matching the input Campaign Code
+      operationId: deleteCampaign
+      parameters:
+        - name: campaignCode
+          in: path
+          description: Campaign Code of the campaign that needs to be deleted
+          required: true
+          schema:
+            type: string
+            example: Q2HC16825
+      responses:
+        '400':
+          description: Invalid Code supplied
+        '404':
+          description: Campaign not found
+components:
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        campaignCode:
+          type: string
+          example: Q2HC16825
+        campaignName:
+          type: string
+          example: 25% Premium Discount for HC168 Plus
+        campaignDescription:
+          type: string
+          example: HC168 Plus Discount for 2025-2026
+        campaignStartDate:
+          type: string
+          format: date-time
+        campaignEndDate:
+          type: string
+          format: date-time
+        flyers:
+          type: array
+          items: 
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        hasCommissionScarificeOption:
+          type: boolean
+      xml:
+        name: order
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Campaign:
+      description: Campaign settings that needs to be created/updated to CCS and eBAO
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Campaign'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Campaign'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    ccs_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://ccs.ctflife.io/oauth/authorize
+          scopes:
+            write:campaign: modify campaign
+            read:campaign: read your campaigns
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
