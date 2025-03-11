@@ -1,0 +1,293 @@
+openapi: 3.0.3
+info:
+  title: Campaign Setup - OpenAPI 3.0
+  description:
+    Campaign and Coupon API for Campaign setup
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: kelvink.wong@ctflife.com.hk
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://to_be_provided/api/v3
+tags:
+  - name: campaign
+    description: Everything about Campaign
+paths:
+  /setup/campaign:
+    post:
+      tags:
+        - setup
+      summary: Create a new Campaign
+      description: Create a new Campaign in CCS 
+      operationId: createCampaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+    put:
+      tags:
+        - setup
+      summary: Update an existing Campaign
+      description: Update an existing in CCS
+      operationId: updateCampaign
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  /setup/campaign/{campaignCode}:
+    get:
+      tags:
+        - setup
+      summary: Find Campaign by CampaignCode (for Setup)
+      description: Return Campaign with Campaign Code matching the input
+      operationId: getCampaignByCampaignCode
+      parameters:
+        - name: campaignCode
+          in: path
+          description: Campaign Code of campaign that needs to be fetched
+          required: true
+          schema:
+            type: string
+            example: Q2HC16825
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+        '400':
+          description: Invalid Code supplied
+        '404':
+          description: Campaign not found
+    delete:
+      tags:
+        - setup
+      summary: Delete campaign by campaign code
+      description: Delete Campaign matching the input Campaign Code
+      operationId: deleteCampaign
+      parameters:
+        - name: campaignCode
+          in: path
+          description: Campaign Code of the campaign that needs to be deleted
+          required: true
+          schema:
+            type: string
+            example: Q2HC16825
+      responses:
+        '400':
+          description: Invalid Code supplied
+        '404':
+          description: Campaign not found
+components:
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        campaignCode:
+          type: string
+          example: Q2HC16825
+        campaignName:
+          type: array
+          items: 
+            $ref: '#/components/schemas/CampaignName'        
+        campaignDesc:
+          type: array
+          items: 
+            $ref: '#/components/schemas/CampaignDesc'     
+        campaignType:
+          type: string
+          enum:
+            - DiscountCampaign
+            - RefundCampaign
+            - CouponCampaign
+        campaignStartDate:
+          type: string
+          format: date
+        campaignEndDate:
+          type: string
+          format: date
+        channels:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Channel'
+        planCode:
+          type: array
+          example: ["CPON1", "MW2IU"]
+          description: Plan Code list of the Campaign, specify "ALLExceptILAS" if Campaign applicable to ALL Plan except ILAS     
+          items: 
+            type: string
+        flyers:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Flyer'
+        coExistFlag:
+          type: boolean
+          description: Applicable to Product campaign internally only. i.e. can be co-existed with campaigns from other dept such as K Dollar coupon
+        status:
+          type: string
+          description: Campaign Activation Status
+          example: active
+          enum:
+            - active
+            - inactive
+        approvalDate:
+          type: string
+          format: date-time
+        campaignDiscountRulesLocation:
+          type: string
+          example: https://mystorage_location/campaignrules/discount_rules_CAMPAIGN1_version.xlsx
+          description: URL of the campaign discount rules spreadsheet per Campaign
+        version:
+          type: integer
+        tag:
+          type: array
+          example: ["hot", "new"]          
+          items:
+            type: string
+
+      xml:
+        name: campaign
+    CampaignName:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 25% Premium Discount Summer Promotion for HC168 Plus
+        lang:
+          type: string
+          enum:
+            - en-us
+            - zh-hk
+            - zh-cn
+      xml:
+        name: campaignName
+    CampaignDesc:
+      type: object
+      properties:
+        desciption:
+          type: string
+          example: Detail Description of the Campaign, e.g. discount offer, criteria in free text format
+        lang:
+          type: string
+          enum:
+            - en-us
+            - zh-hk
+            - zh-cn
+      xml:
+        name: campaignDesc
+    Flyer:
+      type: object
+      properties:
+        URL:
+          type: string
+          example: https://mystorage_location/flyer1_en_us.pdf
+        lang:
+          type: string
+          enum:
+            - en-us
+            - zh-hk
+            - zh-cn
+        attachedToPolicy:
+          type: boolean
+          description: The field information will pass to eBao so that eBao would know whether need to attach flyer into policy doc when issuing policy
+      xml:
+        name: flyer
+    CommissionSacrifice:
+      type: object
+      properties:
+        producerCode:
+          type: string
+          example: "0380466"
+          description: Producer Code 'XXXXXXX' (7-digitals numeric) under distribution channel of the campaign  of the assigned producer with the commission sacrifice rate
+        startDate:
+          type: string
+          description: Commission Sacrifice Start Date
+          format: date
+        endDate:
+          type: string
+          description: Commission Sacrifice End Date
+          format: date
+        commisionSacrificeRate:
+          type: number
+          example: 4.5
+          description: Commission Sacrifice Rate
+      xml:
+        name: commissionSacrifice        
+    Channel:
+        type: object
+        properties:
+          channel:
+            type: string
+            example: IFAandBrokerageLife
+            description: Eligible Channels
+            enum:
+              - TiedAgency
+              - Brokerage
+              - IFAandBrokerage
+              - IFAandBrokerageLife
+              - PartnershipServices
+              - PremierBusiness
+              - CorporateAgency
+              - All
+          hasCommissionScarificeOption:
+            type: boolean              
+          commissionSacrifice:
+            type: array
+            items: 
+              $ref: '#/components/schemas/CommissionSacrifice'          
+        xml:
+          name: channel
+
+  requestBodies:
+    Campaign:
+      description: Campaign settings that needs to be created/updated to CCS
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Campaign'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Campaign'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
