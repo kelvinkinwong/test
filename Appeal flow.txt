@@ -1,0 +1,22 @@
+title Customer's policy appeal flow
+
+participant Customer
+participant CS
+
+participant Contact Centre
+participant eBAO Appeal Function (New)
+participant eBAO DB
+
+Customer->CS:Customer 1 request for appeal\non policy A's discount offer
+CS->Contact Centre:Verify Customer Identity
+CS->eBAO Appeal Function (New):Search policy Detail:Policy A
+
+eBAO Appeal Function (New)->eBAO DB:Query customer's policy\n(Customer 1, Policy A)
+CS->eBAO Appeal Function (New):Select Available Campaing/s for Policy A
+note over eBAO Appeal Function (New),CCS: Retrieve the campaign list by Plan Code only (ignore the Policy Info)
+eBAO Appeal Function (New)->CCS:Retrieve Campaign List(Plan Code@Policy A):Campaign List
+eBAO Appeal Function (New)->eBAO Appeal Function (New):Display Campaign List for Plan Code
+CS->eBAO Appeal Function (New): Create an appeal CS Case in eBAO (Customer 1, Policy A)
+CS->Customer:Inform Customer 1 appeal\nof Policy A in progress
+
+
