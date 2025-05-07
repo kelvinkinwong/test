@@ -1,11 +1,15 @@
-title Customer's policy appeal flow
+title Customer's policy campaign appeal flow
 
 participant Customer
 participant CS
 
+participant Campaign Owner
+
 participant Contact Centre
 participant eBAO Appeal Function (New)
 participant eBAO DB
+
+participant CCS
 
 Customer->CS:Customer 1 request for appeal\non policy A's discount offer
 CS->Contact Centre:Verify Customer Identity
@@ -13,10 +17,18 @@ CS->eBAO Appeal Function (New):Search policy Detail:Policy A
 
 eBAO Appeal Function (New)->eBAO DB:Query customer's policy\n(Customer 1, Policy A)
 CS->eBAO Appeal Function (New):Select Available Campaing/s for Policy A
-note over eBAO Appeal Function (New),CCS: Retrieve the campaign list by Plan Code only (ignore the Policy Info)
+note over eBAO Appeal Function (New),CCS:Retrieve the campaign list by Plan Code only (bypass Policy Info - e.g. AP, Submission Date check)
 eBAO Appeal Function (New)->CCS:Retrieve Campaign List(Plan Code@Policy A):Campaign List
 eBAO Appeal Function (New)->eBAO Appeal Function (New):Display Campaign List for Plan Code
 CS->eBAO Appeal Function (New): Create an appeal CS Case in eBAO (Customer 1, Policy A)
-CS->Customer:Inform Customer 1 appeal\nof Policy A in progress
-
-
+CS->Customer:Inform Customer 1 appeal\nof Policy A's case logged\nand processing in progress
+eBAO Appeal Function (New)->Campaign Owner:Notify Campaign Owner for approval\n(Customer 1, Policy A, Campaign List)
+Campaign Owner->eBAO Appeal Function (New):Review the Appeal Case and assign\na new Campaign for Policy A
+note over eBAO Appeal Function (New),CCS: Retrieve campaign detail to be assigned to the policy
+eBAO Appeal Function (New)->CCS:Retrieve Campaign Detail(Campaign Code):Campaign Detail
+Campaign Owner->eBAO Appeal Function (New):Approve Campaign B for Policy A
+eBAO Appeal Function (New)->CS:Notify CS for Appeal approval result
+CS->Customer:Inform Customer 1 on\nappeal result
+eBAO Appeal Function (New)->eBAO DB:Remove original Campaigns of Policy A
+eBAO Appeal Function (New)->eBAO DB:Attach Campaign B to Policy A
+CS->eBAO Appeal Function (New):CS Appeal Case Close
